@@ -28,7 +28,8 @@ public class TutorialControllerTest {
     public void testGetAllStudents() {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(baseURL + "/read/all",
+        ResponseEntity<String> response = restTemplate.withBasicAuth("admin","admin")
+                .exchange(baseURL + "/read/all",
                 HttpMethod.GET, entity, String.class);
         assertNotNull(response.getBody());
         System.out.println(response.getBody());
@@ -36,8 +37,9 @@ public class TutorialControllerTest {
 
     @Test
     public void testGetStudentById() {
-        Tutorial tutorial = restTemplate.getForObject(baseURL + "/tutorial/1", Tutorial.class);
-        System.out.println(tutorial.getTutorFirstName());
+        Tutorial tutorial = restTemplate.withBasicAuth("admin","admin")
+                .getForObject(baseURL + "/read/1", Tutorial.class);
+        System.out.println(tutorial);
         assertNotNull(tutorial);
     }
 
@@ -47,7 +49,7 @@ public class TutorialControllerTest {
         System.out.println(tutorial);
         TestCase.assertNotNull(tutorial);
 
-        ResponseEntity<Tutorial> postResponse = restTemplate.withBasicAuth("user","password")
+        ResponseEntity<Tutorial> postResponse = restTemplate.withBasicAuth("admin","admin")
                 .postForEntity(baseURL + "/create/", tutorial, Tutorial.class);
 
         TestCase.assertNotNull(postResponse);
@@ -61,12 +63,14 @@ public class TutorialControllerTest {
         Tutorial tutorial = restTemplate.getForObject(baseURL + "/read/" + id, Tutorial.class);
         tutorial = TutorialFactory.getTutorial(1,"Kyle","Josias");
 
-        ResponseEntity<Tutorial> postResponse = restTemplate.withBasicAuth("user","password")
+        ResponseEntity<Tutorial> postResponse = restTemplate.withBasicAuth("admin","admin")
                 .postForEntity(baseURL + "/create/", tutorial, Tutorial.class);
 
-        restTemplate.put(baseURL + "/update/", tutorial);
+        restTemplate.withBasicAuth("admin","admin")
+                .put(baseURL + "/update/", tutorial);
 
-        Tutorial updatedTutorial = restTemplate.getForObject(baseURL + "/read/" + id, Tutorial.class);
+        Tutorial updatedTutorial = restTemplate.withBasicAuth("admin","admin")
+                .getForObject(baseURL + "/read/" + id, Tutorial.class);
         TestCase.assertNotNull(updatedTutorial);
         System.out.println(updatedTutorial);
     }

@@ -8,14 +8,14 @@ import java.util.Set;
 public class AccountingRepositoryImpl implements AccountingRepository {
 
     private static AccountingRepositoryImpl repository = null;
-    private Set<Accounting> accountings;
+    private Set<Accounting> accountingList;
 
     private AccountingRepositoryImpl() {
-        this.accountings = new HashSet<>();
+        this.accountingList = new HashSet<>();
     }
 
     private Accounting findAccounting(String subjectCode) {
-        return this.accountings.stream()
+        return this.accountingList.stream()
                 .filter(accountings -> accountings.getSubjectCode().trim().equals(subjectCode))
                 .findAny()
                 .orElse(null);
@@ -27,7 +27,7 @@ public class AccountingRepositoryImpl implements AccountingRepository {
     }
 
     public Accounting create(Accounting accountings){
-        this.accountings.add(accountings);
+        this.accountingList.add(accountings);
         return accountings;
     }
 
@@ -39,7 +39,7 @@ public class AccountingRepositoryImpl implements AccountingRepository {
     public Accounting update(Accounting accountings) {
         Accounting toDelete = findAccounting(accountings.getSubjectCode());
         if(toDelete != null) {
-            this.accountings.remove(toDelete);
+            this.accountingList.remove(toDelete);
             return create(accountings);
         }
         return null;
@@ -47,12 +47,12 @@ public class AccountingRepositoryImpl implements AccountingRepository {
 
     public void delete(String subjectCode) {
         Accounting accountings = findAccounting(subjectCode);
-        if (accountings != null) this.accountings.remove(accountings);
+        if (accountings != null) this.accountingList.remove(accountings);
 
     }
 
     public Set<Accounting> getAll(){
-        return this.accountings;
+        return this.accountingList;
     }
 
 

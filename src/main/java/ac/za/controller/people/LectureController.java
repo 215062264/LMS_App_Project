@@ -20,7 +20,7 @@ public class LectureController {
         return service.create(student);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     @ResponseBody
     public Lecture update(@RequestBody Lecture student) {
         return service.update(student);

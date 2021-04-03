@@ -7,7 +7,6 @@ import java.util.Set;
 
 public interface AccountingService extends IService<Accounting, String> {
 
-    Set<Accounting> getAllAccounting();
-    Set<Accounting> getAll();
+        Set<Accounting> getAll();
 
 }

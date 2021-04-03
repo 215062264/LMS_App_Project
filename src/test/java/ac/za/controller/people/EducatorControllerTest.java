@@ -30,17 +30,11 @@ public class EducatorControllerTest {
     public void testGetAllEducator() {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(baseURL + "/read/all",
+        ResponseEntity<String> response = restTemplate.withBasicAuth("admin","admin")
+                .exchange(baseURL + "/read/all",
                 HttpMethod.GET, entity, String.class);
         assertNotNull(response.getBody());
         System.out.println(response.getBody());
-    }
-
-    @Test
-    public void testGetEducatorById() {
-        Educator educator = restTemplate.getForObject(baseURL + "/read/1", Educator.class);
-        System.out.println(educator.getEducatorId());
-        assertNotNull(educator);
     }
 
     @Test
@@ -49,7 +43,7 @@ public class EducatorControllerTest {
         System.out.println(educator);
         TestCase.assertNotNull(educator);
 
-        ResponseEntity<Educator> postResponse = restTemplate.withBasicAuth("user","password")
+        ResponseEntity<Educator> postResponse = restTemplate.withBasicAuth("admin","admin")
                 .postForEntity(baseURL + "/create/", educator, Educator.class);
 
         TestCase.assertNotNull(postResponse);
@@ -58,24 +52,35 @@ public class EducatorControllerTest {
     }
 
     @Test
+    public void testGetEducatorById() {
+        Educator educator = restTemplate.withBasicAuth("admin","admin")
+                .getForObject(baseURL + "/read/1", Educator.class);
+        System.out.println(educator);
+        assertNotNull(educator);
+    }
+
+
+    @Test
     public void testUpdateEducator() {
         Integer id = 1;
         Educator educator = restTemplate.getForObject(baseURL + "/read/" + id, Educator.class);
         educator = EducatorFactory.getEducator("Tony","Stark",id,33);
 
-        ResponseEntity<Educator> postResponse = restTemplate.withBasicAuth("user","password")
+        ResponseEntity<Educator> postResponse = restTemplate.withBasicAuth("admin","admin")
                 .postForEntity(baseURL + "/create/", educator, Educator.class);
 
-        restTemplate.put(baseURL + "/update/", educator);
+        restTemplate.withBasicAuth("admin","admin")
+                .put(baseURL + "/update/", educator);
 
-        Educator updatedEducator = restTemplate.getForObject(baseURL + "/read/" + id, Educator.class);
+        Educator updatedEducator = restTemplate.withBasicAuth("admin","admin")
+                .getForObject(baseURL + "/read/" + id, Educator.class);
         TestCase.assertNotNull(updatedEducator);
         System.out.println(updatedEducator);
     }
 
     @Test
     public void testDeleteEducator() {
-        String id = "1";
+        Integer id = 1;
         Educator educator = restTemplate.getForObject(baseURL + "/educator/" + id, Educator.class);
         TestCase.assertNotNull(educator);
         restTemplate.delete(baseURL + "/educator/" + id);

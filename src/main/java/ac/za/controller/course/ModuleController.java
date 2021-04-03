@@ -20,7 +20,7 @@ public class ModuleController {
         return service.create(module);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     @ResponseBody
     public Module update(@RequestBody Module module) {
         return service.update(module);

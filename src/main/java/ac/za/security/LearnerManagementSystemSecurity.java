@@ -1,6 +1,5 @@
 package ac.za.security;
 
-import ac.za.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import java.util.Arrays;
 
@@ -26,7 +24,7 @@ public class LearnerManagementSystemSecurity extends  WebSecurityConfigurerAdapt
     private static final String USER_ROLE = "USER";
     private static final String ADMIN_ROLE = "ADMIN";
 
-    //@Autowired
+    @Autowired
     public UserDetailsService userDetailsService;
 
 //    @Bean
@@ -62,7 +60,7 @@ public class LearnerManagementSystemSecurity extends  WebSecurityConfigurerAdapt
                 .httpBasic()
                 .and()
                 .authorizeRequests()
-              .antMatchers(HttpMethod.POST,"/basicauth").permitAll()
+              .antMatchers(HttpMethod.OPTIONS,"/basicauth").permitAll()
               .antMatchers(HttpMethod.GET,"/api/**").hasAnyRole(USER_ROLE,ADMIN_ROLE)
                 .antMatchers(HttpMethod.POST, "/api/**").hasRole(ADMIN_ROLE)
               .antMatchers(HttpMethod.PUT, "/api/**").hasRole(ADMIN_ROLE)

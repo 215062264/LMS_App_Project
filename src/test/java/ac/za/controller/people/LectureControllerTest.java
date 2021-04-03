@@ -29,15 +29,18 @@ public class LectureControllerTest {
         HttpHeaders headers = new HttpHeaders();
 
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(baseURL + "/read/all",
+        ResponseEntity<String> response = restTemplate.withBasicAuth("admin","admin")
+                .exchange(baseURL + "/read/all",
                 HttpMethod.GET, entity, String.class);
         assertNotNull(response.getBody());
+        System.out.println(response.getBody());
     }
 
     @Test
     public void testGetLectureById() {
-        Lecture lecture = restTemplate.getForObject(baseURL + "/read/1", Lecture.class);
-        System.out.println(lecture.getLecturerId());
+        Lecture lecture = restTemplate.withBasicAuth("admin","admin")
+                .getForObject(baseURL + "/read/1", Lecture.class);
+        System.out.println(lecture);
         assertNotNull(lecture);
     }
 
@@ -47,7 +50,7 @@ public class LectureControllerTest {
         System.out.println(lecture);
         TestCase.assertNotNull(lecture);
 
-        ResponseEntity<Lecture> postResponse = restTemplate.withBasicAuth("user","password")
+        ResponseEntity<Lecture> postResponse = restTemplate.withBasicAuth("admin","admin")
                 .postForEntity(baseURL + "/create/", lecture, Lecture.class);
 
         TestCase.assertNotNull(postResponse);
@@ -61,12 +64,14 @@ public class LectureControllerTest {
         Lecture lecture = restTemplate.getForObject(baseURL + "/read/" + id, Lecture.class);
         lecture = LectureFactory.getLecture(1,"Morgan",3);
 
-        ResponseEntity<Lecture> postResponse = restTemplate.withBasicAuth("user","password")
+        ResponseEntity<Lecture> postResponse = restTemplate.withBasicAuth("admin","admin")
                 .postForEntity(baseURL + "/create/", lecture, Lecture.class);
 
-        restTemplate.put(baseURL + "/update/", lecture);
+        restTemplate.withBasicAuth("admin","admin")
+                .put(baseURL + "/update/", lecture);
 
-        Lecture updatedLecture = restTemplate.getForObject(baseURL + "/read/" + id, Lecture.class);
+        Lecture updatedLecture = restTemplate.withBasicAuth("admin","admin")
+                .getForObject(baseURL + "/read/" + id, Lecture.class);
         TestCase.assertNotNull(updatedLecture);
         System.out.println(updatedLecture);
     }

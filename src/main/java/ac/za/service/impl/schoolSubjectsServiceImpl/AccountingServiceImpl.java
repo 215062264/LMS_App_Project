@@ -4,6 +4,7 @@ import ac.za.domain.schoolSubjects.Accounting;
 import ac.za.repository.repoInterface.schoolSubjects.AccountingRepository;
 import ac.za.repository.Impl.schoolSubjectsRepositoryImpl.AccountingRepositoryImpl;
 import ac.za.service.serviceInterface.schoolSubjects.AccountingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -29,6 +30,11 @@ public class AccountingServiceImpl implements AccountingService {
     }
 
     @Override
+    public Accounting read(String s) {
+        return this.repository.read(s);
+    }
+
+    @Override
     public Accounting update(Accounting course) {
         return this.repository.update(course);
     }
@@ -38,17 +44,6 @@ public class AccountingServiceImpl implements AccountingService {
         this.repository.delete(s);
     }
 
-    @Override
-    public Accounting read(String s) {
-        return this.repository.read(s);
-    }
-
-    @Override
-    public Set<Accounting> getAllAccounting() {
-        Set<Accounting> accountings = getAll();
-
-        return null;
-    }
 
     @Override
     public Set<Accounting> getAll() {

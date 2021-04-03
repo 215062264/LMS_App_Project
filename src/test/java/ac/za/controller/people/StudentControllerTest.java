@@ -30,17 +30,11 @@ public class StudentControllerTest {
     public void testGetAllStudents() {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(baseURL + "/read/all",
+        ResponseEntity<String> response = restTemplate.withBasicAuth("admin","admin")
+                .exchange(baseURL + "/read/all",
                 HttpMethod.GET, entity, String.class);
         TestCase.assertNotNull(response.getBody());
         System.out.println(response.getBody());
-    }
-
-    @Test
-    public void testGetStudentById() {
-        Student student = restTemplate.getForObject(baseURL + "/read/1", Student.class);
-        System.out.println(student.getStudentFirstName());
-        TestCase.assertNotNull(student);
     }
 
     @Test
@@ -49,7 +43,7 @@ public class StudentControllerTest {
         System.out.println(student);
         TestCase.assertNotNull(student);
 
-        ResponseEntity<Student> postResponse = restTemplate.withBasicAuth("user","password")
+        ResponseEntity<Student> postResponse = restTemplate.withBasicAuth("admin","admin")
                 .postForEntity(baseURL + "/create/", student, Student.class);
 
         TestCase.assertNotNull(postResponse);
@@ -58,17 +52,29 @@ public class StudentControllerTest {
     }
 
     @Test
+    public void testGetStudentById() {
+        Student student = restTemplate.withBasicAuth("admin","admin")
+                .getForObject(baseURL + "/read/1", Student.class);
+        System.out.println(student);
+        TestCase.assertNotNull(student);
+    }
+
+
+
+    @Test
     public void testUpdateStudent() {
         Integer id = 1;
         Student student = restTemplate.getForObject(baseURL + "/read/" + id, Student.class);
         student = StudentFactory.getStudent(id,"Tony","Stark",33);
 
-        ResponseEntity<Student> postResponse = restTemplate.withBasicAuth("user","password")
+        ResponseEntity<Student> postResponse = restTemplate.withBasicAuth("admin","admin")
                 .postForEntity(baseURL + "/create/", student, Student.class);
 
-        restTemplate.put(baseURL + "/update/", student);
+        restTemplate.withBasicAuth("admin","admin")
+                .put(baseURL + "/update/", student);
 
-        Student updatedStudent = restTemplate.getForObject(baseURL + "/read/" + id, Student.class);
+        Student updatedStudent = restTemplate.withBasicAuth("admin","admin")
+                .getForObject(baseURL + "/read/" + id, Student.class);
         TestCase.assertNotNull(updatedStudent);
         System.out.println(updatedStudent);
 

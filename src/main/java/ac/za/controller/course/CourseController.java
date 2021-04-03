@@ -21,7 +21,7 @@ public class CourseController {
         return service.create(course);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     @ResponseBody
     public Course update(@RequestBody Course course) {
         return service.update(course);

@@ -21,7 +21,7 @@ public class EducatorController {
         return service.create(educator);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     @ResponseBody
     public Educator update(@RequestBody Educator educator) {
         return service.update(educator);
